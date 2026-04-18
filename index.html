@@ -68,6 +68,21 @@
       font-size: 14px;
       cursor: pointer;
     }
+
+    .steps {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #ecfeff;
+      color: #155e75;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .steps[hidden] {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -80,6 +95,7 @@
     <div id="result" class="result">Telegram ID: -</div>
     <button id="logout-btn" class="logout-btn" type="button" hidden>Разлогиниться</button>
     <button id="switch-account-btn" class="switch-btn" type="button">Сменить Telegram аккаунт</button>
+    <div id="switch-steps" class="steps" hidden></div>
     <div id="error" class="error"></div>
   </main>
 
@@ -95,6 +111,7 @@
     function clearAuthState() {
       document.getElementById("result").textContent = "Telegram ID: -";
       document.getElementById("logout-btn").hidden = true;
+      document.getElementById("switch-steps").hidden = true;
     }
 
     function onTelegramAuth(user) {
@@ -112,9 +129,13 @@
     function switchTelegramAccount() {
       localStorage.removeItem(STORAGE_KEY);
       clearAuthState();
-      window.open("https://core.telegram.org/widgets/login", "_blank", "noopener,noreferrer");
-      document.getElementById("error").textContent =
-        "Открой вкладку Telegram Widgets Login, нажми logout у текущего аккаунта, затем вернись и нажми вход снова.";
+      window.open("https://web.telegram.org/", "_blank", "noopener,noreferrer");
+      document.getElementById("switch-steps").innerHTML =
+        "1) В открытой вкладке Telegram: Settings -> Privacy and Security -> Connected Websites.<br>" +
+        "2) Удали сайт/бот для этого входа.<br>" +
+        "3) Вернись сюда и нажми кнопку Telegram Login.";
+      document.getElementById("switch-steps").hidden = false;
+      document.getElementById("error").textContent = "";
     }
 
     function renderTelegramWidget() {
