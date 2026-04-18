@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telegram Login Widget</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+    }
+
+    .card {
+      width: min(92vw, 460px);
+      padding: 24px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .result {
+      margin-top: 16px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #eef4ff;
+      color: #1e3a8a;
+    }
+
+    .error {
+      margin-top: 12px;
+      color: #b91c1c;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Telegram Login Widget</h1>
+    <p class="hint">После входа появится ваш Telegram ID.</p>
+
+    <script
+      async
+      src="https://telegram.org/js/telegram-widget.js?22"
+      data-telegram-login="Yoga_T_bot"
+      data-size="large"
+      data-userpic="false"
+      data-request-access="write"
+      data-onauth="onTelegramAuth(user)">
+    </script>
+
+    <div id="result" class="result">Telegram ID: -</div>
+    <div id="error" class="error"></div>
+  </main>
+
+  <script>
+    function onTelegramAuth(user) {
+      document.getElementById("result").textContent = "Telegram ID: " + user.id;
+      document.getElementById("error").textContent = "";
+    }
+
+    if (window.location.protocol === "file:") {
+      document.getElementById("error").textContent =
+        "Открыто через file://. Для работы Telegram Login Widget открой страницу по https:// домену и укажи data-telegram-login с username бота.";
+    }
+  </script>
+</body>
+</html>
