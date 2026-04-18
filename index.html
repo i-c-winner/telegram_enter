@@ -112,15 +112,9 @@
     function switchTelegramAccount() {
       localStorage.removeItem(STORAGE_KEY);
       clearAuthState();
-      var oauthUrl =
-        "https://oauth.telegram.org/auth?bot=" +
-        encodeURIComponent(BOT_USERNAME) +
-        "&origin=" +
-        encodeURIComponent(window.location.origin) +
-        "&embed=1&request_access=write";
-      window.open(oauthUrl, "_blank", "noopener,noreferrer");
+      window.open("https://core.telegram.org/widgets/login", "_blank", "noopener,noreferrer");
       document.getElementById("error").textContent =
-        "Открой Telegram OAuth вкладку, нажми logout (если он есть), затем вернись и нажми вход снова.";
+        "Открой вкладку Telegram Widgets Login, нажми logout у текущего аккаунта, затем вернись и нажми вход снова.";
     }
 
     function renderTelegramWidget() {
