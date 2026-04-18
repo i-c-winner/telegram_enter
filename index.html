@@ -57,6 +57,17 @@
     .logout-btn[hidden] {
       display: none;
     }
+
+    .switch-btn {
+      margin-top: 8px;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #0f766e;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -68,6 +79,7 @@
 
     <div id="result" class="result">Telegram ID: -</div>
     <button id="logout-btn" class="logout-btn" type="button" hidden>Разлогиниться</button>
+    <button id="switch-account-btn" class="switch-btn" type="button">Сменить Telegram аккаунт</button>
     <div id="error" class="error"></div>
   </main>
 
@@ -95,6 +107,20 @@
       localStorage.removeItem(STORAGE_KEY);
       clearAuthState();
       location.reload();
+    }
+
+    function switchTelegramAccount() {
+      localStorage.removeItem(STORAGE_KEY);
+      clearAuthState();
+      var oauthUrl =
+        "https://oauth.telegram.org/auth?bot=" +
+        encodeURIComponent(BOT_USERNAME) +
+        "&origin=" +
+        encodeURIComponent(window.location.origin) +
+        "&embed=1&request_access=write";
+      window.open(oauthUrl, "_blank", "noopener,noreferrer");
+      document.getElementById("error").textContent =
+        "Открой Telegram OAuth вкладку, нажми logout (если он есть), затем вернись и нажми вход снова.";
     }
 
     function renderTelegramWidget() {
@@ -127,6 +153,7 @@
         "Открыто через file://. Для работы Telegram Login Widget открой страницу по https:// домену и укажи data-telegram-login с username бота.";
     } else {
       document.getElementById("logout-btn").addEventListener("click", logout);
+      document.getElementById("switch-account-btn").addEventListener("click", switchTelegramAccount);
       try {
         var saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
