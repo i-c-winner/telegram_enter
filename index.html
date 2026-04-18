@@ -42,6 +42,21 @@
       color: #b91c1c;
       font-size: 13px;
     }
+
+    .logout-btn {
+      margin-top: 12px;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .logout-btn[hidden] {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -52,15 +67,34 @@
     <div id="tg-widget"></div>
 
     <div id="result" class="result">Telegram ID: -</div>
+    <button id="logout-btn" class="logout-btn" type="button" hidden>Разлогиниться</button>
     <div id="error" class="error"></div>
   </main>
 
   <script>
     var BOT_USERNAME = "Yoga_T_bot";
+    var STORAGE_KEY = "telegram_user";
+
+    function setAuthState(user) {
+      document.getElementById("result").textContent = "Telegram ID: " + user.id;
+      document.getElementById("logout-btn").hidden = false;
+    }
+
+    function clearAuthState() {
+      document.getElementById("result").textContent = "Telegram ID: -";
+      document.getElementById("logout-btn").hidden = true;
+    }
 
     function onTelegramAuth(user) {
-      document.getElementById("result").textContent = "Telegram ID: " + user.id;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      setAuthState(user);
       document.getElementById("error").textContent = "";
+    }
+
+    function logout() {
+      localStorage.removeItem(STORAGE_KEY);
+      clearAuthState();
+      location.reload();
     }
 
     function renderTelegramWidget() {
@@ -92,6 +126,17 @@
       document.getElementById("error").textContent =
         "Открыто через file://. Для работы Telegram Login Widget открой страницу по https:// домену и укажи data-telegram-login с username бота.";
     } else {
+      document.getElementById("logout-btn").addEventListener("click", logout);
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          setAuthState(JSON.parse(saved));
+        } else {
+          clearAuthState();
+        }
+      } catch (e) {
+        clearAuthState();
+      }
       renderTelegramWidget();
     }
   </script>
