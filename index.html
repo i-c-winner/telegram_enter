@@ -115,9 +115,15 @@
       plan6.addEventListener('click', () => setPlan('6m'));
 
       function resolveLang() {
-        const lang = tg?.initDataUnsafe?.user?.language_code || 'ru';
-        if (lang.startsWith('uz')) return 'uz';
-        if (lang.startsWith('kk') || lang.startsWith('kz')) return 'kz';
+        const url = new URL(window.location.href);
+        const fromQuery = (url.searchParams.get('lang') || '').toLowerCase();
+        if (fromQuery === 'uz' || fromQuery === 'kz' || fromQuery === 'ru') {
+          return fromQuery;
+        }
+
+        const tgLang = (tg?.initDataUnsafe?.user?.language_code || 'ru').toLowerCase();
+        if (tgLang.startsWith('uz')) return 'uz';
+        if (tgLang.startsWith('kk') || tgLang.startsWith('kz')) return 'kz';
         return 'ru';
       }
 
