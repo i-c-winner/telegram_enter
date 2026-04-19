@@ -1,177 +1,210 @@
 <!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Telegram Login Widget</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-    }
-
-    .card {
-      width: min(92vw, 460px);
-      padding: 24px;
-      border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      text-align: center;
-    }
-
-    .hint {
-      margin: 0 0 16px;
-      color: #475569;
-      font-size: 14px;
-    }
-
-    .result {
-      margin-top: 16px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: #eef4ff;
-      color: #1e3a8a;
-    }
-
-    .error {
-      margin-top: 12px;
-      color: #b91c1c;
-      font-size: 13px;
-    }
-
-    .logout-btn {
-      margin-top: 12px;
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: #dc2626;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .logout-btn[hidden] {
-      display: none;
-    }
-
-    .switch-btn {
-      margin-top: 8px;
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: #0f766e;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .steps {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: #ecfeff;
-      color: #155e75;
-      text-align: left;
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .steps[hidden] {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <main class="card">
-    <h1>Telegram Login Widget</h1>
-  </main>
-
-  <script>
-    var BOT_USERNAME = "Yoga_T_bot";
-    var STORAGE_KEY = "telegram_user";
-
-    function setAuthState(user) {
-      document.getElementById("result").textContent = "Telegram ID: " + user.id;
-      document.getElementById("logout-btn").hidden = false;
-    }
-
-    function clearAuthState() {
-      document.getElementById("result").textContent = "Telegram ID: -";
-      document.getElementById("logout-btn").hidden = true;
-      document.getElementById("switch-steps").hidden = true;
-    }
-
-    function onTelegramAuth(user) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-      setAuthState(user);
-      document.getElementById("error").textContent = "";
-    }
-
-    function logout() {
-      localStorage.removeItem(STORAGE_KEY);
-      clearAuthState();
-      location.reload();
-    }
-
-    function switchTelegramAccount() {
-      localStorage.removeItem(STORAGE_KEY);
-      clearAuthState();
-      window.open("https://web.telegram.org/", "_blank", "noopener,noreferrer");
-      document.getElementById("switch-steps").innerHTML =
-        "1) В открытой вкладке Telegram: Settings -> Privacy and Security -> Connected Websites.<br>" +
-        "2) Удали сайт/бот для этого входа.<br>" +
-        "3) Вернись сюда и нажми кнопку Telegram Login.";
-      document.getElementById("switch-steps").hidden = false;
-      document.getElementById("error").textContent = "";
-    }
-
-    function renderTelegramWidget() {
-      var container = document.getElementById("tg-widget");
-      var script = document.createElement("script");
-      script.async = true;
-      script.src = "https://telegram.org/js/telegram-widget.js?22";
-      script.setAttribute("data-telegram-login", BOT_USERNAME);
-      script.setAttribute("data-size", "large");
-      script.setAttribute("data-userpic", "false");
-      script.setAttribute("data-request-access", "write");
-      script.setAttribute("data-onauth", "onTelegramAuth(user)");
-      script.onerror = function () {
-        document.getElementById("error").textContent =
-          "Не удалось загрузить Telegram Widget. Отключи блокировщик рекламы/трекеров для сайта и перезагрузи страницу.";
-      };
-      container.appendChild(script);
-
-      setTimeout(function () {
-        var hasWidget = container.querySelector("iframe") || container.querySelector("span");
-        if (!hasWidget && window.location.protocol !== "file:") {
-          document.getElementById("error").textContent =
-            "Кнопка Telegram не появилась. Проверь: 1) BOT username верный, 2) /setdomain в BotFather = текущий домен, 3) блокировщик в браузере отключен.";
-        }
-      }, 2500);
-    }
-
-    if (window.location.protocol === "file:") {
-      document.getElementById("error").textContent =
-        "Открыто через file://. Для работы Telegram Login Widget открой страницу по https:// домену и укажи data-telegram-login с username бота.";
-    } else {
-      document.getElementById("logout-btn").addEventListener("click", logout);
-      document.getElementById("switch-account-btn").addEventListener("click", switchTelegramAccount);
-      try {
-        var saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          setAuthState(JSON.parse(saved));
-        } else {
-          clearAuthState();
-        }
-      } catch (e) {
-        clearAuthState();
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click Payment Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      :root {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       }
-      renderTelegramWidget();
-    }
-  </script>
-</body>
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(150deg, #edf7ff, #fff7e9);
+        color: #111827;
+      }
+      .card {
+        width: min(92vw, 480px);
+        background: #fff;
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 18px 40px rgba(16, 24, 40, 0.12);
+      }
+      h1 {
+        margin: 0;
+        font-size: 28px;
+      }
+      .muted {
+        margin-top: 8px;
+        color: #667085;
+        font-size: 15px;
+      }
+      .plan-row {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .plan-btn {
+        border: 1px solid #d0d5dd;
+        background: #fff;
+        border-radius: 12px;
+        padding: 12px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .plan-btn.active {
+        border-color: #1769ff;
+        background: #eef4ff;
+      }
+      .pay-btn {
+        margin-top: 14px;
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        background: #1769ff;
+        color: #fff;
+        font-size: 16px;
+        padding: 12px;
+        cursor: pointer;
+      }
+      .hint {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #475467;
+      }
+      code {
+        background: #f2f4f7;
+        border-radius: 6px;
+        padding: 1px 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1 id="title">Привет!</h1>
+      <p class="muted" id="subtitle">Выберите тариф и перейдите на внешний сервер оплаты Click.</p>
+
+      <div class="plan-row">
+        <button class="plan-btn active" id="plan-1m" data-plan="1m">1 месяц</button>
+        <button class="plan-btn" id="plan-6m" data-plan="6m">6 месяцев</button>
+      </div>
+
+      <button class="pay-btn" id="pay-btn">Оплатить через Click</button>
+
+      <p class="hint" id="hint">
+        Базовый URL оплаты задаётся через query-параметр
+        <code>paymentBase</code>, например:
+        <code>?paymentBase=https://pay.example.com/click/start</code>
+      </p>
+    </main>
+
+    <script>
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        tg.ready();
+      }
+
+      const state = { plan: '1m' };
+
+      const plan1 = document.getElementById('plan-1m');
+      const plan6 = document.getElementById('plan-6m');
+      const payBtn = document.getElementById('pay-btn');
+
+      function setPlan(plan) {
+        state.plan = plan;
+        plan1.classList.toggle('active', plan === '1m');
+        plan6.classList.toggle('active', plan === '6m');
+      }
+
+      plan1.addEventListener('click', () => setPlan('1m'));
+      plan6.addEventListener('click', () => setPlan('6m'));
+
+      function resolveLang() {
+        const url = new URL(window.location.href);
+        const fromQuery = (url.searchParams.get('lang') || '').toLowerCase();
+        if (fromQuery === 'uz' || fromQuery === 'kz' || fromQuery === 'ru') {
+          return fromQuery;
+        }
+
+        const tgLang = (tg?.initDataUnsafe?.user?.language_code || 'ru').toLowerCase();
+        if (tgLang.startsWith('uz')) return 'uz';
+        if (tgLang.startsWith('kk') || tgLang.startsWith('kz')) return 'kz';
+        return 'ru';
+      }
+
+      function applyLocale() {
+        const lang = resolveLang();
+        const title = document.getElementById('title');
+        const subtitle = document.getElementById('subtitle');
+
+        const dict = {
+          ru: {
+            title: 'Привет!',
+            subtitle: 'Выберите тариф и перейдите на внешний сервер оплаты Click.',
+            p1: '1 месяц',
+            p6: '6 месяцев',
+            pay: 'Оплатить через Click'
+          },
+          uz: {
+            title: 'Salom!',
+            subtitle: 'Tarifni tanlang va Click to\'lovi uchun tashqi serverga o\'ting.',
+            p1: '1 oy',
+            p6: '6 oy',
+            pay: 'Click orqali to\'lash'
+          },
+          kz: {
+            title: 'Сәлем!',
+            subtitle: 'Тарифті таңдап, Click төлемі үшін сыртқы серверге өтіңіз.',
+            p1: '1 ай',
+            p6: '6 ай',
+            pay: 'Click арқылы төлеу'
+          }
+        };
+
+        title.textContent = dict[lang].title;
+        subtitle.textContent = dict[lang].subtitle;
+        plan1.textContent = dict[lang].p1;
+        plan6.textContent = dict[lang].p6;
+        payBtn.textContent = dict[lang].pay;
+      }
+
+      function getPaymentBase() {
+        const url = new URL(window.location.href);
+        return url.searchParams.get('paymentBase') || '';
+      }
+
+      function buildPaymentUrl(baseUrl) {
+        const user = tg?.initDataUnsafe?.user;
+        const url = new URL(baseUrl);
+
+        if (user?.id) url.searchParams.set('telegramUserId', String(user.id));
+        if (user?.username) url.searchParams.set('username', user.username);
+        url.searchParams.set('plan', state.plan);
+        url.searchParams.set('source', 'telegram-miniapp');
+        url.searchParams.set('lang', resolveLang());
+
+        return url.toString();
+      }
+
+      payBtn.addEventListener('click', () => {
+        const paymentBase = getPaymentBase();
+
+        if (!paymentBase) {
+          alert('Не задан paymentBase в URL Mini App.');
+          return;
+        }
+
+        let target;
+        try {
+          target = buildPaymentUrl(paymentBase);
+        } catch {
+          alert('Некорректный paymentBase URL.');
+          return;
+        }
+
+        if (tg?.openLink) {
+          tg.openLink(target);
+        } else {
+          window.open(target, '_blank', 'noopener,noreferrer');
+        }
+      });
+
+      applyLocale();
+    </script>
+  </body>
 </html>
