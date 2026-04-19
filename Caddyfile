@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :{$PORT} {
   encode gzip
   root * /app
@@ -11,5 +12,9 @@
     -Server
   }
 
+=======
+:8088 {
+  root * /Users/dmitriy/Projects/work/yoga
+>>>>>>> parent of 43afe14 (fix: Исправит Railway)
   file_server
 }
