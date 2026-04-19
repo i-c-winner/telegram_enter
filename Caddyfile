@@ -1,4 +1,5 @@
-:8088 {
-  root * /Users/dmitriy/Projects/work/yoga
+:{$PORT:8088} {
+  root * /app
+  try_files {path} /index.html
   file_server
 }
