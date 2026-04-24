@@ -109,7 +109,13 @@
       }
 
       function openExternal() {
-        window.open(window.location.href, "_blank");
+        const url = window.location.href;
+
+        if (window.Telegram?.WebApp?.openLink) {
+          window.Telegram.WebApp.openLink(url);
+        } else {
+          window.location.href = url;
+        }
       }
 
       function renderTelegramWidget() {
